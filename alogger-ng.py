@@ -338,9 +338,9 @@ if __name__ == "__main__":
         yesterday = datetime.datetime.today() - datetime.timedelta(days=1)
         filename = yesterday.strftime('%Y%m%d')
 
-    #parse_logs(filename)
+    parse_logs(filename)
 
-    read_all()
+    #read_all()
     
     sys.exit(0)
 
