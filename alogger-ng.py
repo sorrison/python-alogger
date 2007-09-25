@@ -278,7 +278,7 @@ def parse_logs(filename):
         username = data['user']
         user_id = int(user_account['id'])
         machine_id = int(machine['id'])
-        date = datetime.datetime(int(filename[:4]), int(filename[4:6]), int(filename[6:]))
+        date = datetime.date(int(filename[:4]), int(filename[4:6]), int(filename[6:]))
         #date = datetime.datetime.strptime(filename, '%Y%m%d')
         cpu_usage = data['cpu_usage']
         est_wall_time = data['est_wall_time']
