@@ -25,9 +25,8 @@ Raises value error if funky wall time
 """
 
 from datetime import datetime
-from accounts.alogger_ng.core import get_in_seconds
 
-
+from utils import get_in_seconds
 
 
 def pbs_to_dict(line):
@@ -47,6 +46,8 @@ def pbs_to_dict(line):
     data = {}
     formatted_data = {}
     
+    formatted_data['jobid'] = job_num
+
     # Make into a dict using values key=value
     for d in raw_data:
         try:
@@ -73,6 +74,7 @@ def pbs_to_dict(line):
         
 
     cores = data['exec_host'].count('/')
+    formatted_data['cores'] = cores
     formatted_data['cpu_usage'] = cores * formatted_data['act_wall_time']
     
     formatted_data['queue'] = data['queue']
