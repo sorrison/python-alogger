@@ -15,7 +15,7 @@ Assumes the file name is in the format YYYYMMDD
 """
 
 def log_to_dict(line, LOG_TYPE):
-    from accounts.alogger_ng.parsers import pbs_to_dict
+    from alogger_ng.parsers import pbs_to_dict
 
     if LOG_TYPE == 'PBS':
         return pbs_to_dict(line)

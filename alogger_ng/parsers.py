@@ -15,6 +15,9 @@ ctime         | datetime |
 qtime         | datetime | 
 etime         | datetime |
 start         | datetime |
+jobid	      | string   |
+cores	      | int      | number of cores
+jobname       | string   | Job name
 
 Optional
 mem           | int      | memory used
@@ -65,7 +68,7 @@ def pbs_to_dict(line):
     if 'account' in data:
         formatted_data['project'] = data['account']
 
-    
+    formatted_data['jobname'] = data['jobname']    
     try:
         formatted_data['est_wall_time'] = get_in_seconds(data['Resource_List.walltime'])
         formatted_data['act_wall_time'] = get_in_seconds(data['resources_used.walltime'])
