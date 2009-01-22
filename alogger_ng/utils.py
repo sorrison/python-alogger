@@ -1,9 +1,5 @@
 """
-
-To Configure this program see alogger-ng.cfg
-
-To customise this to read a different log format
-just implement a method like pbs_to_dict (see below)
+alogger-ng utils
 
 """
 MAX_JOB_LENGTH = 94608000 # 3 years
