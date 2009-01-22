@@ -94,44 +94,44 @@ def pbs_to_dict(line):
     except:
         formatted_data['mem'] = 0
     formatted_data['vmem'] = int(data['resources_used.vmem'][:len(data['resources_used.vmem'])-2])
-    
+
     #pmem format 30gb or 400mb also have b and kb
     try:
         pmem_value = int(data['Resource_List.pmem'][:-2])
-        pmem_unit = data['Resource_List.pmem'][len(data['Resource_List.pmem'])-2:]
-        if units == 'gb':
+        pmem_units = data['Resource_List.pmem'][len(data['Resource_List.pmem'])-2:]
+        if pmem_units == 'gb':
             formatted_data['list_pmem'] = pmem_value * 1024
-        elif units = 'mb':
+        elif pmem_units == 'mb':
             formatted_data['list_pmem'] = pmem_value
     except:
         formatted_data['list_pmem'] = 0
 
     try:
         mem_value = int(data['Resource_List.mem'][:-2])
-        mem_unit = data['Resource_List.mem'][len(data['Resource_List.mem'])-2:]
-        if units == 'gb':
+        mem_units = data['Resource_List.mem'][len(data['Resource_List.mem'])-2:]
+        if mem_units == 'gb':
             formatted_data['list_mem'] = mem_value * 1024
-        elif units = 'mb':
+        elif mem_units == 'mb':
             formatted_data['list_mem'] = mem_value
     except:
         formatted_data['list_mem'] = 0 
 
     try:
         vmem_value = int(data['Resource_List.vmem'][:-2])
-        vmem_unit = data['Resource_List.vmem'][len(data['Resource_List.vmem'])-2:]
-        if units == 'gb':
+        vmem_units = data['Resource_List.vmem'][len(data['Resource_List.vmem'])-2:]
+        if vmem_units == 'gb':
             formatted_data['list_vmem'] = vmem_value * 1024
-        elif units = 'mb':
+        elif vmem_units == 'mb':
             formatted_data['list_vmem'] = vmem_value
     except:
         formatted_data['list_vmem'] = 0 
 
     try:
         pvmem_value = int(data['Resource_List.pvmem'][:-2])
-        pvmem_unit = data['Resource_List.pvmem'][len(data['Resource_List.pvmem'])-2:]
-        if units == 'gb':
+        pvmem_units = data['Resource_List.pvmem'][len(data['Resource_List.pvmem'])-2:]
+        if pvmem_units == 'gb':
             formatted_data['list_pvmem'] = pvmem_value * 1024
-        elif units = 'mb':
+        elif pvmem_units == 'mb':
             formatted_data['list_pvmem'] = pvmem_value
     except:
         formatted_data['list_pvmem'] = 0 
