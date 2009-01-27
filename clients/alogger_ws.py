@@ -8,7 +8,7 @@ import getopt
 
 MACHINE_NAME = 'brecca-ng'
 USERNAME = 'accounts'
-PASSWORD = 'BioVae6e'
+PASSWORD = 'secret'
 
 
 LOG_DIR = '/usr/spool/PBS/server_priv/accounting'
