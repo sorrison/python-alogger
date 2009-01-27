@@ -1,23 +1,24 @@
+# Copyright 2008 VPAC
+#
+# This file is part of alogger-ng.
+#
+# alogger-ng is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# alogger-ng is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with alogger-ng  If not, see <http://www.gnu.org/licenses/>.
+
 """
 alogger-ng utils
 
 """
-MAX_JOB_LENGTH = 94608000 # 3 years
-
-
-"""
-Assumes the file name is in the format YYYYMMDD
-
-"""
-
-def log_to_dict(line, LOG_TYPE):
-    from alogger_ng.parsers import pbs_to_dict
-
-    if LOG_TYPE == 'PBS':
-        return pbs_to_dict(line)
-
-    else:
-        raise KeyError
 
 
 def print_error(line_no, message):
