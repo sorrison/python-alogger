@@ -128,6 +128,6 @@ if __name__ == "__main__":
     else:
         print 'ERROR: You must specify either -f or -y'
 
-    #parse_logs(date, debug)
+    parse_logs(date, cfg, debug)
 
     sys.exit(0)
