@@ -112,7 +112,7 @@ if __name__ == "__main__":
         debug = True
 
     if '-A' in opts:
-        file_list = os.listdir(LOG_DIR)
+        file_list = os.listdir(cfg['LOG_DIR'])
 
         for filename in file_list:
             date = datetime.date(int(filename[:4]), int(filename[4:6]), int(filename[6:]))
