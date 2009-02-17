@@ -33,7 +33,7 @@ def parse_logs(date, cfg, debug=False):
             for line in output:
                 print line               
         except:
-            print server.parse_usage(data, str(date), cfg['MACHINE_NAME'], cfg['LOG_TYPE'])
+            print server.parse_usage(cfg['WS_USERNAME'], cfg['WS_PASSWORD'], data, str(date), cfg['MACHINE_NAME'], cfg['LOG_TYPE'])
             
     
 def print_help():
