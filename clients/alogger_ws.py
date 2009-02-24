@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
         for filename in file_list:
             date = datetime.date(int(filename[:4]), int(filename[4:6]), int(filename[6:]))
-            parse_logs(date, debug)
+            parse_logs(date, cfg, debug)
         sys.exit(0)
          
         
