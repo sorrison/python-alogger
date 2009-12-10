@@ -50,7 +50,8 @@ Raises value error if funky wall time
 
 """
 
-from datetime import datetime
+import datetime
+import logging
 
 from utils import get_in_seconds
 
@@ -63,7 +64,8 @@ def pbs_to_dict(line):
     raises ValueError when time over 3 years
 
     """
-    
+    logging.debug('Parsing line:')
+    logging.debug(line)
     # Split line into parts, only care about raw_data
     date, random, job_num, raw_data = line.split(';')
     
@@ -93,9 +95,15 @@ def pbs_to_dict(line):
 
     formatted_data['jobname'] = data['jobname']    
     try:
-        formatted_data['est_wall_time'] = get_in_seconds(data['Resource_List.walltime'])
         formatted_data['act_wall_time'] = get_in_seconds(data['resources_used.walltime'])
     except:
+        logging.error('Failed to parse act_wall_time value: %s' % data['resources_used.walltime'])
+        raise ValueError
+        
+    try:
+        formatted_data['est_wall_time'] = get_in_seconds(data['Resource_List.walltime'])
+    except:
+        logging.error('Failed to parse est_wall_time value: %s' % data['Resource_List.walltime'])
         raise ValueError
         
 
@@ -110,6 +118,7 @@ def pbs_to_dict(line):
     try:
         formatted_data['mem'] = int(data['resources_used.mem'][:len(data['resources_used.mem'])-2])
     except:
+        logging.warn('No mem value found')
         formatted_data['mem'] = 0
     formatted_data['vmem'] = int(data['resources_used.vmem'][:len(data['resources_used.vmem'])-2])
 
@@ -122,6 +131,7 @@ def pbs_to_dict(line):
         elif pmem_units == 'mb':
             formatted_data['list_pmem'] = pmem_value
     except:
+        logging.warn('No list_pmem value found')
         formatted_data['list_pmem'] = 0
 
     try:
@@ -132,6 +142,7 @@ def pbs_to_dict(line):
         elif mem_units == 'mb':
             formatted_data['list_mem'] = mem_value
     except:
+        logging.warn('No list_mem value found')
         formatted_data['list_mem'] = 0 
 
     try:
@@ -142,6 +153,7 @@ def pbs_to_dict(line):
         elif vmem_units == 'mb':
             formatted_data['list_vmem'] = vmem_value
     except:
+        logging.warn('No list_vmem value found')
         formatted_data['list_vmem'] = 0 
 
     try:
@@ -152,15 +164,69 @@ def pbs_to_dict(line):
         elif pvmem_units == 'mb':
             formatted_data['list_pvmem'] = pvmem_value
     except:
+        logging.warn('No list_pvmem value found')
         formatted_data['list_pvmem'] = 0 
 
     
     formatted_data['exit_status'] = data['Exit_status']
 
+    formatted_data['ctime'] = datetime.datetime.fromtimestamp(int(data['ctime'])).isoformat(' ')
+    formatted_data['qtime'] = datetime.datetime.fromtimestamp(int(data['qtime'])).isoformat(' ')
+    formatted_data['etime'] = datetime.datetime.fromtimestamp(int(data['etime'])).isoformat(' ')
+    formatted_data['start'] = datetime.datetime.fromtimestamp(int(data['start'])).isoformat(' ')
 
-    formatted_data['ctime'] = datetime.fromtimestamp(int(data['ctime'])).isoformat(' ')
-    formatted_data['qtime'] = datetime.fromtimestamp(int(data['qtime'])).isoformat(' ')
-    formatted_data['etime'] = datetime.fromtimestamp(int(data['etime'])).isoformat(' ')
-    formatted_data['start'] = datetime.fromtimestamp(int(data['start'])).isoformat(' ')
+    logging.debug("Parsed following data")
+    for k,v in formatted_data.items():
+        logging.debug("%s = %s" % (k, v))
 
     return formatted_data
+
+
+def sge_to_dict(line):
+    """
+    Parses a SGE accounting log file line into a python dict
+    
+    raises KeyError when line not valid
+    raises ValueError when time over 3 years
+
+    """
+    try:
+    
+        queue, hostname, group, username, jobname, jobid, account, priority, qsub_time, start_time, end_time, failed, exit_status, ru_wallclock, ru_utime, ru_stime, ru_maxrss, ru_ixrss, ru_ismrss, ru_idrss,  ru_isrss, ru_minflt, ru_majflt, ru_nswap, ru_inblock, ru_oublock, ru_msgsnd, ru_msgrcv, ru_nsignals, ru_nvcsw, ru_nivcsw, project, department, granted_pe, slots, UNKNOWN, cpu, mem, UNKNOWN, command_line_arguments, UNKNOWN, UNKNOWN, maxvmem_bytes = line.split(':')
+    except:
+        a1, a2, queue, hostname, group, username, jobname, jobid, account, priority, qsub_time, start_time, end_time, failed, exit_status, ru_wallclock, ru_utime, ru_stime, ru_maxrss, ru_ixrss, ru_ismrss, ru_idrss,  ru_isrss, ru_minflt, ru_majflt, ru_nswap, ru_inblock, ru_oublock, ru_msgsnd, ru_msgrcv, ru_nsignals, ru_nvcsw, ru_nivcsw, project, department, granted_pe, slots, UNKNOWN, cpu, mem, UNKNOWN, command_line_arguments, UNKNOWN, UNKNOWN, maxvmem_bytes = line.split(':')
+
+    
+    data = {}
+    formatted_data = {}
+    
+    formatted_data['jobid'] = jobid
+
+    formatted_data['date'] = datetime.date.fromtimestamp(long(end_time))
+    formatted_data['user'] = username
+
+    formatted_data['jobname'] = jobname 
+    try:
+        formatted_data['est_wall_time'] = None
+        formatted_data['act_wall_time'] = int(ru_wallclock)
+    except:
+        logging.error('Failed to parse act_wall_time value: %s' % ru_wallclock)
+        raise ValueError
+        
+
+    formatted_data['cores'] = int(slots)
+    formatted_data['cpu_usage'] = formatted_data['cores'] * formatted_data['act_wall_time']
+    
+    formatted_data['queue'] = queue
+
+
+    formatted_data['start'] = datetime.date.fromtimestamp(long(qsub_time))
+    formatted_data['exit_status'] = exit_status
+
+    logging.debug("Parsed following data")
+    for k,v in formatted_data.items():
+        logging.debug("%s = %s" % (k, v))
+
+    return formatted_data
+
+

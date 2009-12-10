@@ -15,14 +15,27 @@
 # You should have received a copy of the GNU General Public License
 # along with alogger-ng  If not, see <http://www.gnu.org/licenses/>.
 
+from settings import *
+
+import logging
+logging.basicConfig(
+    level = settings.LOG_LEVEL,
+    format = '%(asctime)s %(levelname)s %(message)s',
+    filename = settings.LOG_FILE,
+    filemode = 'a'
+)
+
 
 
 def log_to_dict(line, LOG_TYPE):
 
     if LOG_TYPE == 'PBS':
-        from alogger_ng.parsers import pbs_to_dict
+        from alogger_ng.parsers import pbs_to_dict as line_to_dict
         return pbs_to_dict(line)
 
+    elif LOG_TYPE == 'SGE':
+        from alogger_ng.parsers import sge_to_dict as line_to_dict
     else:
         raise KeyError
 
+    return line_to_dict(line)
