@@ -31,11 +31,11 @@ def log_to_dict(line, LOG_TYPE):
 
     if LOG_TYPE == 'PBS':
         from alogger_ng.parsers import pbs_to_dict as line_to_dict
-        return pbs_to_dict(line)
 
     elif LOG_TYPE == 'SGE':
         from alogger_ng.parsers import sge_to_dict as line_to_dict
     else:
+        logging.error('Cannot find parser for log type: %s' % LOG_TYPE)
         raise KeyError
 
     return line_to_dict(line)
