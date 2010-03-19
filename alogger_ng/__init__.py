@@ -15,16 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with alogger-ng  If not, see <http://www.gnu.org/licenses/>.
 
-from settings import *
-
-import logging
-logging.basicConfig(
-    level = settings.LOG_LEVEL,
-    format = '%(asctime)s %(levelname)s %(message)s',
-    filename = settings.LOG_FILE,
-    filemode = 'a'
-)
-
 
 
 def log_to_dict(line, LOG_TYPE):
