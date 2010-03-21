@@ -1,0 +1,16 @@
+Source: python-alogger
+Section: python
+Priority: optional
+Maintainer: Sam Morrison <sam@vpac.org>
+Build-Depends: debhelper (>=7.0.0), python (>= 2.4), python-support (>= 0.6), cdbs (>= 0.4.49)
+Standards-Version: 3.8.3.0
+
+Package: python-alogger
+Architecture: all
+Homepage: http://trac.vpac.org/alogger-ng/
+Depends: ${misc:Depends}, ${python:Depends}
+Description: Small Python library to parse resource manager logs
+ Parses PBS and SGE logs and puts the information
+ in a common Python dictionary.
+ Provides one method that takes in a log file and type and
+ returns a Python dictionary of log attributes.
