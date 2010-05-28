@@ -105,8 +105,8 @@ def pbs_to_dict(line):
     except:
         logging.error('Failed to parse est_wall_time value: %s' % data['Resource_List.walltime'])
         raise ValueError
-        
 
+    formatted_data['exec_hosts'] = [x[:-2] for x in data['exec_host'].split('+')]
     cores = data['exec_host'].count('/')
     formatted_data['cores'] = cores
     formatted_data['cpu_usage'] = cores * formatted_data['act_wall_time']
