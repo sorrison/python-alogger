@@ -59,7 +59,7 @@ from utils import get_in_seconds
 def get_mem_in_kb(memory_string):
     # Strip kb or b etc. from end of mem entries
     #Example imput 304kb or 322b
-    mem_re = rm.compile('([0-9]*)([[a-zA-Z]*)')
+    mem_re = re.compile('([0-9]*)([[a-zA-Z]*)')
     memory, unit = mem_re.match(memory_string).groups()
     memory = int(memory)
     if unit == 'kb':
@@ -73,10 +73,10 @@ def get_mem_in_kb(memory_string):
     elif unit == 'tb':
         return memory * 1024 * 1024 * 1024
     else:
-        logging.error('Failed to parse memory value: %s' % memory_string
+        logging.error('Failed to parse memory value: %s' % memory_string)
         raise ValueError
-
-
+        
+                      
 def get_mem_in_mb(memory_string):
     return get_mem_in_kb(memory_string) / 1024
 
