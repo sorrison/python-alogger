@@ -1,3 +1,9 @@
+python-alogger (2.0.3) testing; urgency=low
+
+  * Handle memory values in a cleaner way
+
+ -- Sam Morrison <sam@vpac.org>  Fri, 03 Sep 2010 15:26:53 +1000
+
 python-alogger (2.0.2) testing; urgency=low
 
   * Parse exec_host in PBS
