@@ -52,8 +52,33 @@ Raises value error if funky wall time
 
 import datetime
 import logging
+import re
 
 from utils import get_in_seconds
+
+def get_mem_in_kb(memory_string):
+    # Strip kb or b etc. from end of mem entries
+    #Example imput 304kb or 322b
+    mem_re = rm.compile('([0-9]*)([[a-zA-Z]*)')
+    memory, unit = mem_re.match(memory_string).groups()
+    memory = int(memory)
+    if unit == 'kb':
+        return memory
+    elif unit == 'b':
+        return memory / 1024
+    elif unit == 'mb':
+        return memory * 1024
+    elif unit == 'gb':
+        return memory * 1024 * 1024
+    elif unit == 'tb':
+        return memory * 1024 * 1024 * 1024
+    else:
+        logging.error('Failed to parse memory value: %s' % memory_string
+        raise ValueError
+
+
+def get_mem_in_mb(memory_string):
+    return get_mem_in_kb(memory_string) / 1024
 
 
 def pbs_to_dict(line):
@@ -113,60 +138,14 @@ def pbs_to_dict(line):
     
     formatted_data['queue'] = data['queue']
 
-    # Strip kb from end of mem entries
-    # No mem field for wembley-hp
-    try:
-        formatted_data['mem'] = int(data['resources_used.mem'][:len(data['resources_used.mem'])-2])
-    except:
-        logging.warn('No mem value found')
-        formatted_data['mem'] = 0
-    formatted_data['vmem'] = int(data['resources_used.vmem'][:len(data['resources_used.vmem'])-2])
+    formatted_data['mem'] = get_mem_in_kb(data.get('resources_used.mem', '0kb'))
+    formatted_data['vmem'] = get_mem_in_kb(data.get('resources_used.vmem', '0kb'))
 
-    #pmem format 30gb or 400mb also have b and kb
-    try:
-        pmem_value = int(data['Resource_List.pmem'][:-2])
-        pmem_units = data['Resource_List.pmem'][len(data['Resource_List.pmem'])-2:]
-        if pmem_units == 'gb':
-            formatted_data['list_pmem'] = pmem_value * 1024
-        elif pmem_units == 'mb':
-            formatted_data['list_pmem'] = pmem_value
-    except:
-        logging.warn('No list_pmem value found')
-        formatted_data['list_pmem'] = 0
+    formatted_data['list_pmem'] = get_mem_in_mb(data.get('Resource_List.pmem', '0kb'))
+    formatted_data['list_mem'] = get_mem_in_mb(data.get('Resource_List.mem', '0kb'))
 
-    try:
-        mem_value = int(data['Resource_List.mem'][:-2])
-        mem_units = data['Resource_List.mem'][len(data['Resource_List.mem'])-2:]
-        if mem_units == 'gb':
-            formatted_data['list_mem'] = mem_value * 1024
-        elif mem_units == 'mb':
-            formatted_data['list_mem'] = mem_value
-    except:
-        logging.warn('No list_mem value found')
-        formatted_data['list_mem'] = 0 
-
-    try:
-        vmem_value = int(data['Resource_List.vmem'][:-2])
-        vmem_units = data['Resource_List.vmem'][len(data['Resource_List.vmem'])-2:]
-        if vmem_units == 'gb':
-            formatted_data['list_vmem'] = vmem_value * 1024
-        elif vmem_units == 'mb':
-            formatted_data['list_vmem'] = vmem_value
-    except:
-        logging.warn('No list_vmem value found')
-        formatted_data['list_vmem'] = 0 
-
-    try:
-        pvmem_value = int(data['Resource_List.pvmem'][:-2])
-        pvmem_units = data['Resource_List.pvmem'][len(data['Resource_List.pvmem'])-2:]
-        if pvmem_units == 'gb':
-            formatted_data['list_pvmem'] = pvmem_value * 1024
-        elif pvmem_units == 'mb':
-            formatted_data['list_pvmem'] = pvmem_value
-    except:
-        logging.warn('No list_pvmem value found')
-        formatted_data['list_pvmem'] = 0 
-
+    formatted_data['list_vmem'] = get_mem_in_mb(data.get('Resource_List.vmem', '0kb'))
+    formatted_data['list_pvmem'] = get_mem_in_mb(data.get('Resource_List.pvmem', '0kb'))
     
     formatted_data['exit_status'] = data['Exit_status']
 
@@ -218,7 +197,6 @@ def sge_to_dict(line):
     formatted_data['cpu_usage'] = formatted_data['cores'] * formatted_data['act_wall_time']
     
     formatted_data['queue'] = queue
-
 
     formatted_data['start'] = datetime.date.fromtimestamp(long(qsub_time))
     formatted_data['exit_status'] = exit_status
