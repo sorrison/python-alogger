@@ -20,6 +20,9 @@ alogger-ng utils
 
 """
 
+import re
+
+
 
 def print_error(line_no, message):
     """
@@ -48,3 +51,27 @@ def get_in_seconds(time):
 
     return total
 
+
+def get_mem_in_kb(memory_string):
+    # Strip kb or b etc. from end of mem entries
+    #Example imput 304kb or 322b
+    mem_re = re.compile('([0-9]*)([[a-zA-Z]*)')
+    memory, unit = mem_re.match(memory_string).groups()
+    memory = int(memory)
+    if unit == 'kb':
+        return memory
+    elif unit == 'b':
+        return memory / 1024
+    elif unit == 'mb':
+        return memory * 1024
+    elif unit == 'gb':
+        return memory * 1024 * 1024
+    elif unit == 'tb':
+        return memory * 1024 * 1024 * 1024
+    else:
+        logging.error('Failed to parse memory value: %s' % memory_string)
+        raise ValueError
+        
+                      
+def get_mem_in_mb(memory_string):
+    return get_mem_in_kb(memory_string) / 1024
