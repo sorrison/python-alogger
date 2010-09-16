@@ -1,0 +1,8 @@
+files
+pycompat
+python-alogger.debhelper.log
+python-alogger.postinst.debhelper
+python-alogger.prerm.debhelper
+python-alogger.substvars
+python-alogger/
+python-module-stampdir/
