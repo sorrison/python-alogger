@@ -93,7 +93,8 @@ def pbs_to_dict(line):
     if 'account' in data:
         formatted_data['project'] = data['account']
 
-    formatted_data['jobname'] = data['jobname']    
+    formatted_data['jobname'] = data['jobname']
+    formatted_data['group'] = data['group']
     try:
         formatted_data['act_wall_time'] = get_in_seconds(data['resources_used.walltime'])
     except:
