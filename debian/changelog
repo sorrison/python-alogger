@@ -1,3 +1,11 @@
+python-alogger (2.1-1) testing; urgency=low
+
+  * Added SLURM log parser
+  * Moved parsers into own directory
+  * Debian packaging changes
+
+ -- Sam Morrison <sam@vpac.org>  Wed, 22 Sep 2010 11:03:20 +1000
+
 python-alogger (2.0.3) testing; urgency=low
 
   * Handle memory values in a cleaner way
