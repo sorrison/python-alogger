@@ -73,7 +73,7 @@ def slurm_to_dict(line):
     try:
         formatted_data['exit_status'] = int(data['JobState']) 				# might be "COMPLETED", "CANCELLED", "TIMEOUT" and may have multiple entries per line !
     except ValueError:
-        formatted_data['exit_status'] = '' # Watch out, Sam says dbase expects an int !!!
+        formatted_data['exit_status'] = 0 # Watch out, Sam says dbase expects an int !!!
 
     formatted_data['queue'] = 'UNKOWN'
     formatted_data['mem'] = 0
@@ -82,7 +82,7 @@ def slurm_to_dict(line):
     formatted_data['list_vmem'] = 0
     formatted_data['list_pmem'] = 0
     formatted_data['list_pvmem'] = 0
-
+    formatted_data['etime'] = formatted_data['qtime']
     # Things we don't seem to have available, would like qtime and est_wall_time
     # mem, qtime, list_pmem, list_pvmem, queue, vmem, list_vmem, jobname. 
     # Note that "out of the box" slurm does not report on Queue or Creation time.
