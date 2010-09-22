@@ -68,13 +68,12 @@ def sge_to_dict(line):
     except:
         a1, a2, queue, hostname, group, username, jobname, jobid, account, priority, qsub_time, start_time, end_time, failed, exit_status, ru_wallclock, ru_utime, ru_stime, ru_maxrss, ru_ixrss, ru_ismrss, ru_idrss,  ru_isrss, ru_minflt, ru_majflt, ru_nswap, ru_inblock, ru_oublock, ru_msgsnd, ru_msgrcv, ru_nsignals, ru_nvcsw, ru_nivcsw, project, department, granted_pe, slots, UNKNOWN, cpu, mem, UNKNOWN, command_line_arguments, UNKNOWN, UNKNOWN, maxvmem_bytes = line.split(':')
 
-    
     data = {}
     formatted_data = {}
     
     formatted_data['jobid'] = jobid
 
-    formatted_data['date'] = datetime.date.fromtimestamp(long(end_time))
+    formatted_data['date'] = datetime.datetime.fromtimestamp(long(end_time)).isoformat(' ')
     formatted_data['user'] = username
 
     formatted_data['jobname'] = jobname 
@@ -91,7 +90,7 @@ def sge_to_dict(line):
     
     formatted_data['queue'] = queue
 
-    formatted_data['start'] = datetime.date.fromtimestamp(long(qsub_time))
+    formatted_data['start'] = datetime.datetime.fromtimestamp(long(qsub_time)).isoformat(' ')
     formatted_data['exit_status'] = exit_status
 
     logging.debug("Parsed following data")
