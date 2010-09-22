@@ -35,10 +35,12 @@ def get_version():
 def log_to_dict(line, LOG_TYPE):
 
     if LOG_TYPE == 'PBS':
-        from alogger.parsers import pbs_to_dict as line_to_dict
+        from alogger.parsers.torque import pbs_to_dict as line_to_dict
 
     elif LOG_TYPE == 'SGE':
-        from alogger.parsers import sge_to_dict as line_to_dict
+        from alogger.parsers.sge import sge_to_dict as line_to_dict
+    elif LOG_TYPE == 'SLURM':
+        from alogger.parsers.slurm import slurm_to_dict as line_to_dict
     else:
         logging.error('Cannot find parser for log type: %s' % LOG_TYPE)
         raise KeyError
