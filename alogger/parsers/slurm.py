@@ -65,11 +65,11 @@ def slurm_to_dict(line):
     formatted_data['project'] = data['GroupId'][:data['GroupId'].find('(')]     # 'VR0021(527)' - remove the uid in brackets.
     try:
         formatted_data['qtime'] = DateTime_from_String(data['SubmitTime']).isoformat(' ')       # '2010-07-30T15:34:39'  
-    except ValueError:
+    except (ValueError,KeyError):
         formatted_data['qtime'] = ''
     try:
         formatted_data['ctime'] = DateTime_from_String(data['SubmitTime']).isoformat(' ')   # for practical purposes, same as etime here.
-    except ValueError:
+    except (ValueError,KeyError):
         formatted_data['ctime'] = ''                                            # Early data does not have SubmitTime
                                                                                 # old records don't have a submit time time.
     try:
