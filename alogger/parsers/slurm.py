@@ -72,15 +72,11 @@ def slurm_to_dict(line):
     except (ValueError,KeyError):
         formatted_data['ctime'] = ''                                            # Early data does not have SubmitTime
                                                                                 # old records don't have a submit time time.
-    try:
-        formatted_data['start'] = DateTime_from_String(data['StartTime']).isoformat(' ')
-    except ValueError:
-        formatted_data['start'] = ''
+
+    # If data['StartTime'] or data['EndTime'] is bad or not given, the following statements will fail
+    formatted_data['start'] = DateTime_from_String(data['StartTime']).isoformat(' ')
     # formatted_data['etime']                                                   # don't care   
-    try:
-        formatted_data['act_wall_time'] = int(time.mktime(DateTime_from_String(data['EndTime']).timetuple())) - int(time.mktime(DateTime_from_String(data['StartTime']).timetuple()))
-    except ValueError:
-        formatted_data['act_wall_time'] = ''
+    formatted_data['act_wall_time'] = int(time.mktime(DateTime_from_String(data['EndTime']).timetuple())) - int(time.mktime(DateTime_from_String(data['StartTime']).timetuple()))
     formatted_data['cpu_usage'] = formatted_data['act_wall_time'] * formatted_data['cores']
     formatted_data['jobname'] = data['Name']                                    # Note that this is the name of the script, not --jobname
     try:
