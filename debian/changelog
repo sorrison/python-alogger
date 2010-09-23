@@ -1,3 +1,9 @@
+python-alogger (2.1.2-1) testing; urgency=low
+
+  * More improvements to slurm parser 
+
+ -- Sam Morrison <sam@vpac.org>  Thu, 23 Sep 2010 15:43:10 +1000
+
 python-alogger (2.1.1-1) testing; urgency=low
 
   * Default values for SLURM
