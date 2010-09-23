@@ -63,13 +63,13 @@ def slurm_to_dict(line):
     formatted_data['cores'] = int(data['ProcCnt'])
     formatted_data['user']  = data['UserId'][:data['UserId'].find('(')]         # 'mike(543)' - remove the uid in brackets.
     formatted_data['project'] = data['GroupId'][:data['GroupId'].find('(')]     # 'VR0021(527)' - remove the uid in brackets.
+
+    # If SubmitTime is invalid and non-existant use StartTime instead.
     try:
         formatted_data['qtime'] = DateTime_from_String(data['SubmitTime']).isoformat(' ')       # '2010-07-30T15:34:39'  
-    except (ValueError,KeyError):
-        formatted_data['qtime'] = DateTime_from_String(data['StartTime']).isoformat(' ')
-    try:
         formatted_data['ctime'] = DateTime_from_String(data['SubmitTime']).isoformat(' ')   # for practical purposes, same as etime here.
     except (ValueError,KeyError):
+        formatted_data['qtime'] = DateTime_from_String(data['StartTime']).isoformat(' ')
         formatted_data['ctime'] = DateTime_from_String(data['StartTime']).isoformat(' ')
                                                                                 # old records don't have a submit time time.
 
