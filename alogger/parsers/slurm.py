@@ -6,8 +6,25 @@ def DateTime_from_String(datetimeSt):
     """Gets a date time string like 2010-09-10T15:54:18 and retuns a datetime object
         raises a ValueError if it all goes wrong """
     DayTime = datetimeSt.split('T')
-    dt = datetime.datetime(int(DayTime[0].split('-')[0]), int(DayTime[0].split('-')[1]), int(DayTime[0].split('-')[2]),
-                int(DayTime[1].split(':')[0]), int(DayTime[1].split(':')[1]), int(DayTime[1].split(':')[2]) )
+    if len(DayTime) != 2:
+        raise ValueError
+
+    Date = DayTime[0].split('-')
+    if len(Date) != 3:
+        raise ValueError
+
+    Time = DayTime[1].split(':')
+    if len(Time) != 3:
+        raise ValueError
+
+    dt = datetime.datetime(
+        year=int(Date[0]),
+        month=int(Date[1]),
+        day=int(Date[2]),
+        hour=int(Time[0]),
+        minute=int(Time[1]),
+        second=int(Time[2])
+    )
     return dt
 
 def SecondsFromSlurmTime(timeString):
