@@ -62,7 +62,7 @@ def slurm_to_dict(line):
     formatted_data['jobid'] = data['JobId']
     formatted_data['cores'] = int(data['ProcCnt'])
     formatted_data['user']  = data['UserId'][:data['UserId'].find('(')]         # 'mike(543)' - remove the uid in brackets.
-    formatted_data['project'] = data['GroupId'][:data['GroupId'].find('(')]     # 'VR0021(527)' - remove the uid in brackets.
+    formatted_data['project'] = data['Account']
 
     # If SubmitTime is invalid and non-existant use StartTime instead.
     try:
