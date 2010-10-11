@@ -88,7 +88,7 @@ def slurm_to_dict(line):
     except ValueError:
         formatted_data['exit_status'] = 0 # Watch out, Sam says dbase expects an int !!!
 
-    formatted_data['queue'] = 'UNKOWN'
+    formatted_data['queue'] = 'UNKNOWN'
     formatted_data['mem'] = 0
     formatted_data['vmem'] = 0
     formatted_data['list_mem'] = 0
