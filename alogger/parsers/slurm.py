@@ -77,6 +77,7 @@ def slurm_to_dict(line):
     formatted_data['start'] = DateTime_from_String(data['StartTime']).isoformat(' ')
     # formatted_data['etime']                                                   # don't care   
     formatted_data['act_wall_time'] = int(time.mktime(DateTime_from_String(data['EndTime']).timetuple())) - int(time.mktime(DateTime_from_String(data['StartTime']).timetuple()))
+    formatted_data['record_time'] = DateTime_from_String(data['StartTime']).isoformat(' ')
     formatted_data['cpu_usage'] = formatted_data['act_wall_time'] * formatted_data['cores']
     formatted_data['jobname'] = data['Name']                                    # Note that this is the name of the script, not --jobname
     try:
