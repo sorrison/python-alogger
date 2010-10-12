@@ -68,7 +68,7 @@ def slurm_to_dict(line):
     try:
         formatted_data['qtime'] = DateTime_from_String(data['SubmitTime']).isoformat(' ')       # '2010-07-30T15:34:39'  
         formatted_data['ctime'] = DateTime_from_String(data['SubmitTime']).isoformat(' ')   # for practical purposes, same as etime here.
-    except (ValueError,KeyError):
+    except (ValueError, KeyError):
         formatted_data['qtime'] = DateTime_from_String(data['StartTime']).isoformat(' ')
         formatted_data['ctime'] = DateTime_from_String(data['StartTime']).isoformat(' ')
                                                                                 # old records don't have a submit time time.
