@@ -62,13 +62,13 @@ def slurm_to_dict(line):
     formatted_data['jobid'] = data['JobId']
     formatted_data['cores'] = int(data['ProcCnt'])
     formatted_data['user']  = data['UserId'][:data['UserId'].find('(')]         # 'mike(543)' - remove the uid in brackets.
-    formatted_data['project'] = data['GroupId'][:data['GroupId'].find('(')]     # 'VR0021(527)' - remove the uid in brackets.
+    formatted_data['project'] = data['Account']
 
     # If SubmitTime is invalid and non-existant use StartTime instead.
     try:
         formatted_data['qtime'] = DateTime_from_String(data['SubmitTime']).isoformat(' ')       # '2010-07-30T15:34:39'  
         formatted_data['ctime'] = DateTime_from_String(data['SubmitTime']).isoformat(' ')   # for practical purposes, same as etime here.
-    except (ValueError,KeyError):
+    except (ValueError, KeyError):
         formatted_data['qtime'] = DateTime_from_String(data['StartTime']).isoformat(' ')
         formatted_data['ctime'] = DateTime_from_String(data['StartTime']).isoformat(' ')
                                                                                 # old records don't have a submit time time.
@@ -77,6 +77,7 @@ def slurm_to_dict(line):
     formatted_data['start'] = DateTime_from_String(data['StartTime']).isoformat(' ')
     # formatted_data['etime']                                                   # don't care   
     formatted_data['act_wall_time'] = int(time.mktime(DateTime_from_String(data['EndTime']).timetuple())) - int(time.mktime(DateTime_from_String(data['StartTime']).timetuple()))
+    formatted_data['record_time'] = DateTime_from_String(data['StartTime']).isoformat(' ')
     formatted_data['cpu_usage'] = formatted_data['act_wall_time'] * formatted_data['cores']
     formatted_data['jobname'] = data['Name']                                    # Note that this is the name of the script, not --jobname
     try:
@@ -88,7 +89,7 @@ def slurm_to_dict(line):
     except ValueError:
         formatted_data['exit_status'] = 0 # Watch out, Sam says dbase expects an int !!!
 
-    formatted_data['queue'] = 'UNKOWN'
+    formatted_data['queue'] = 'UNKNOWN'
     formatted_data['mem'] = 0
     formatted_data['vmem'] = 0
     formatted_data['list_mem'] = 0
