@@ -37,3 +37,4 @@ If queue is light, etime can equal qtime, but not if the job is blocked.
 from torque import pbs_to_dict
 from sge import sge_to_dict
 from slurm import slurm_to_dict
+from winhpc import winhpc_to_dict

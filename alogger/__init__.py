@@ -41,6 +41,8 @@ def log_to_dict(line, LOG_TYPE):
         from alogger.parsers.sge import sge_to_dict as line_to_dict
     elif LOG_TYPE == 'SLURM':
         from alogger.parsers.slurm import slurm_to_dict as line_to_dict
+    elif LOG_TYPE == 'WINHPC':
+        from alogger.parsers.winhpc import winhpc_to_dict as line_to_dict
     else:
         logging.error('Cannot find parser for log type: %s' % LOG_TYPE)
         raise KeyError
